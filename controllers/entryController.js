@@ -11,6 +11,9 @@ module.exports = {
         res.send('Success');
       })
       .catch(function(err) {
+        console.log('----------------------------------------------------------------\nGOT HERE!\n----------------------------------------------------------------\n');
+        console.log(err);
+        console.log('----------------------------------------------------------------\nGOT HERE!\n----------------------------------------------------------------\n');
         res.status(404).json(err);
       });
   },
@@ -29,7 +32,6 @@ module.exports = {
               order: [['createdAt', 'DESC']]
             })
               .then(function(entries) {
-                console.log(entries[0]);
                 res.send(entries);
               })
               .catch(function(err) {

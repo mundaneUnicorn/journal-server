@@ -1,11 +1,12 @@
 var Sequelize = require('sequelize');
 var sequelize = require('../config/db.js');
 
+
 // Define the model that corresponds to the entry table in the database.
 var User = sequelize.define('user', {
   username: {type: Sequelize.STRING, unique: true },
   password: Sequelize.STRING,
-  fullname: Sequelize.STRING
+  fullname: Sequelize.STRING,
 });
 
 // Define the model that corresponds to the entry table in the database.
@@ -54,11 +55,6 @@ var Request = sequelize.define('request', {
   }
 });
 
-Request.sync();
-User.sync();
-Entry.sync();
-Relationships.sync();
-
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
@@ -68,7 +64,10 @@ Request.belongsTo(User);
 User.hasMany(Entry);
 User.hasMany(Request);
 
-
+User.sync();
+Relationships.sync();
+Entry.sync();
+Request.sync();
 
 module.exports.User = User;
 
