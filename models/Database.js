@@ -13,7 +13,11 @@ var User = sequelize.define('user', {
 var Entry = sequelize.define('entry', {
   text: Sequelize.STRING,
   location: Sequelize.STRING,
-  rating: Sequelize.INTEGER,
+  rating: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  }
 });
 
 var Relationships = sequelize.define('relationships', {
