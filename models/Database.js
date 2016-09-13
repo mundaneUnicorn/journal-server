@@ -54,6 +54,11 @@ var Request = sequelize.define('request', {
   }
 })
 
+Request.sync()
+User.sync();
+Entry.sync();
+Relationships.sync();
+
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
@@ -64,10 +69,6 @@ User.hasMany(Entry);
 User.hasMany(Request);
 
 
-User.sync();
-Entry.sync();
-Relationships.sync();
-Request.sync()
 
 module.exports.User = User;
 
