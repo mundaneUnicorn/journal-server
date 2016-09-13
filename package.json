@@ -4,6 +4,8 @@
   "description": "All back-end files for ironic anagrams",
   "main": "server.js",
   "scripts": {
+    "rebase": "git pull upstream master --rebase && git push origin master",
+    "start": "postgres -D /usr/local/pgsql/data -p 5711 && nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

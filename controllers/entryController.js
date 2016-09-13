@@ -29,6 +29,7 @@ module.exports = {
               order: [['createdAt', 'DESC']]
             })
               .then(function(entries){
+                console.log(entries[0]);
                 res.send(entries);
               })
               .catch(function(err){
