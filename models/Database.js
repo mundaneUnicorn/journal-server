@@ -29,13 +29,13 @@ var Request = sequelize.define('request', {
       Relationships.findOne({
         where: { user1: this.userId, user2: this.requestReceiver }
       })
-        .then(function(friends){
+        .then(function(friends) {
           if (friends) {
             next('requestReceiver must NOT be a friend');
           } else {
             next();
           }
-        })
+        });
     },
     mustNotBeDuplicateRequest: function(next) {
       Request.findOne({ where: {
@@ -49,12 +49,12 @@ var Request = sequelize.define('request', {
           } else {
             next();
           }
-        })
+        });
     }
   }
-})
+});
 
-Request.sync()
+Request.sync();
 User.sync();
 Entry.sync();
 Relationships.sync();
@@ -62,8 +62,8 @@ Relationships.sync();
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
-Entry.belongsTo(User)
-Request.belongsTo(User)
+Entry.belongsTo(User);
+Request.belongsTo(User);
 
 User.hasMany(Entry);
 User.hasMany(Request);

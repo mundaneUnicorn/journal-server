@@ -32,4 +32,4 @@ module.exports = function(app, express) {
   app.delete('/api/friendreq', requestController.rejectRequest);
 
 
-}
+};
