@@ -79,29 +79,28 @@ module.exports = {
     });
   },
 
-  //Deletes an entry and returns a copy of that entry
+  //Deletes an entry and sends a copy of that entry
   deleteEntry: (req, res, next) => {
     let deletedEntry;
-    console.log('request body: ', req.body);
-    //find relevant entry
+
+    //find entry
     db.Entry.findOne({
       where: req.body
     })
+    //delete entry
     .then(entry => {
-      console.log('entry found: ', entry.dataValues);
-      //store entry temporarily to send
       deletedEntry = entry.dataValues;
-      //delete entry
       return db.Entry.destroy({
         where: entry.dataValues
       });
     })
+    //send response
     .then(() => {
-      //send back temp entry
       res.send(deletedEntry);
     })
     .catch(error => {
-      console.log('Error deleting entry: ', error);
+      console.log('ENTRY DELETION ERROR: ', error);
+      res.status(500).send('Error');
     })
   }
 };
