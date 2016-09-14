@@ -48,4 +48,27 @@ module.exports = {
         res.status(404).json(err);
       });
   },
+
+  deleteFriend: function (req, res, next) {
+    // TODO: Implement me!
+    db.Users.findOne({
+      where: { username: req.body.friend },
+    }).then(function (response) {
+      db.Relationships.destroy({
+        where: { 
+          user1: req.user.id,
+          user2: response.dataValues.id,
+        },
+      });
+
+      db.Relationships.destroy({
+        where: {
+          user2: req.user.id,
+          user1: response.dataValues.id,
+        },
+      });
+
+      res.send('Okey-dokey, Smokey!');
+    });
+  },
 };

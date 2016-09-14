@@ -23,6 +23,7 @@ module.exports = function(app, express) {
   app.use('/api/friends', utils.decode);
   app.get('/api/friends', friendsController.fetchFriends);
   app.post('/api/friends', friendsController.acceptFriendReq);
+  app.delete('/api/friends', friendsController.deleteFriend);
 
   app.use('/api/friendreq', utils.decode);
   app.post('/api/friendreq', function(req, res, next) {
