@@ -55,7 +55,6 @@ module.exports = {
     }
   },
 
-
   likeEntry: function (req, res, next) {
     // TODO:  Write function that queries database to get a specific entry,
     //        and increments its rating.
@@ -80,9 +79,28 @@ module.exports = {
     });
   },
 
+  //Deletes an entry and sends a copy of that entry
+  deleteEntry: (req, res, next) => {
+    let deletedEntry;
+
+    //find entry
+    db.Entry.findOne({
+      where: req.body
+    })
+    //delete entry
+    .then(entry => {
+      deletedEntry = entry.dataValues;
+      return db.Entry.destroy({
+        where: entry.dataValues
+      });
+    })
+    //send response
+    .then(() => {
+      res.send(deletedEntry);
+    })
+    .catch(error => {
+      console.log('ENTRY DELETION ERROR: ', error);
+      res.status(500).send('Error');
+    })
+  }
 };
-
-
-
-
-
