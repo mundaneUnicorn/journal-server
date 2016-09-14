@@ -3,20 +3,20 @@ var jwt = require('jwt-simple');
 
 module.exports = {
 
-  createUser : function(req, res, next){
+  createUser: function(req, res, next) {
     db.User.create(req.body)
-      .then(function(newUser){
+      .then(function(newUser) {
         var token = jwt.encode(newUser, 'secret');
         res.status(201).json({
           token: token
-        })
+        });
       })
-      .catch(function(err){
-        res.status(404).json(err)
-      })
+      .catch(function(err) {
+        res.status(404).json(err);
+      });
   },
 
-  findUser: function(req, res, next){
+  findUser: function(req, res, next) {
     var username = req.query.username;
     if (!username) {
       return res.status(200).json([]);
@@ -25,12 +25,12 @@ module.exports = {
       attributes: ['id', 'username', 'fullname'],
       where: {username: { $iLike: '%' + username + '%' }}
     })
-      .then(function(result){
+      .then(function(result) {
         res.status(200).json(result);
       })
-      .catch(function(err){
-        res.status(404).json(err)
-      })
+      .catch(function(err) {
+        res.status(404).json(err);
+      });
   },
 
   signIn: function(req, res, next) {
@@ -38,18 +38,18 @@ module.exports = {
     var password = req.body.password;
     db.User.findOne({ where: {username: username}} )
      .then(function (user) {
-        if (!user) {
-          res.status(404).json({ error: 'User does not exist' })
-        } else {
-            if (password === user.password){
-              var token = jwt.encode(user, 'secret');
-              res.json({token: token});
-            } else {
-                res.status(401).json({error: 'Incorrect password'})
-            }
-        }
-      })
-      .catch(function(err){
+       if (!user) {
+         res.status(404).json({ error: 'User does not exist' });
+       } else {
+         if (password === user.password) {
+           var token = jwt.encode(user, 'secret');
+           res.json({token: token});
+         } else {
+           res.status(401).json({error: 'Incorrect password'});
+         }
+       }
+     })
+      .catch(function(err) {
         res.json(err);
       })
   },
@@ -66,7 +66,6 @@ module.exports = {
       })
       .catch(function(err) {
         res.status(404).json(err);
-      })
   }
 
 };

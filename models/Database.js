@@ -1,17 +1,23 @@
 var Sequelize = require('sequelize');
 var sequelize = require('../config/db.js');
 
+
 // Define the model that corresponds to the entry table in the database.
 var User = sequelize.define('user', {
   username: {type: Sequelize.STRING, unique: true },
   password: Sequelize.STRING,
-  fullname: Sequelize.STRING
+  fullname: Sequelize.STRING,
 });
 
 // Define the model that corresponds to the entry table in the database.
 var Entry = sequelize.define('entry', {
   text: Sequelize.STRING,
-  location: Sequelize.STRING
+  location: Sequelize.STRING,
+  rating: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  }
 });
 
 var Relationships = sequelize.define('relationships', {
@@ -28,13 +34,13 @@ var Request = sequelize.define('request', {
       Relationships.findOne({
         where: { user1: this.userId, user2: this.requestReceiver }
       })
-        .then(function(friends){
+        .then(function(friends) {
           if (friends) {
             next('requestReceiver must NOT be a friend');
           } else {
             next();
           }
-        })
+        });
     },
     mustNotBeDuplicateRequest: function(next) {
       Request.findOne({ where: {
@@ -48,25 +54,24 @@ var Request = sequelize.define('request', {
           } else {
             next();
           }
-        })
+        });
     }
   }
-})
+});
 
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
-Entry.belongsTo(User)
-Request.belongsTo(User)
+Entry.belongsTo(User);
+Request.belongsTo(User);
 
 User.hasMany(Entry);
 User.hasMany(Request);
 
-
 User.sync();
-Entry.sync();
 Relationships.sync();
-Request.sync()
+Entry.sync();
+Request.sync();
 
 module.exports.User = User;
 
