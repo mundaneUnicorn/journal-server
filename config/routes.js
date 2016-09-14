@@ -12,6 +12,7 @@ module.exports = function(app, express) {
   app.use('/api/entries', utils.decode);
   app.post('/api/entries', entryController.createEntry);
   app.get('/api/entries', entryController.getEntries);
+  app.delete('/api/entries', entryController.deleteEntry);
 
   app.post('/api/likes', entryController.likeEntry);
 
