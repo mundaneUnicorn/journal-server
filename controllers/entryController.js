@@ -64,15 +64,13 @@ module.exports = {
       }
     })
     .then(function (response) {
-      var votesArray = response.dataValues.votes;
+      var votesArray = JSON.parse(JSON.stringify(response.dataValues.votes));
       var userIndex = votesArray.indexOf(req.body.user);
       if (userIndex === -1) {
-        console.log('--------->', votesArray);
-        console.log('--------->', req.body.user);
         votesArray.push(req.body.user);
-        console.log('--------->', votesArray);
       } else {
         votesArray.splice(userIndex, 1);
+        console.log('----------------->', votesArray);
       }
 
 
@@ -83,11 +81,7 @@ module.exports = {
           id: req.body.entryId,
         }
       }).then(function (response) {
-        if (userIndex === -1) {
-          res.send(JSON.stringify(1));
-        } else {
-          res.send(JSON.stringify(-1));
-        }
+        res.send(JSON.stringify(votesArray.length));
       });
     });
   },
