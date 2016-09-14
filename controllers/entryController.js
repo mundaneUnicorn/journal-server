@@ -55,9 +55,23 @@ module.exports = {
     }
   },
 
+
   likeEntry: function (req, res, next) {
     // TODO:  Write function that queries database to get a specific entry,
     //        and increments its rating.
+    db.Entry.findAll({
+      where: {
+        id: req.body.entryId,
+      }
+    })
+    .then(function (response) {
+      console.log(response);
+    });
   },
 
 };
+
+
+
+
+
