@@ -51,7 +51,22 @@ module.exports = {
      })
       .catch(function(err) {
         res.json(err);
-      });
+      })
+  },
+
+  updatePW: function(req, res, next) {
+    var username = req.body.username;
+    var password = req.body.password;
+    db.User.findOne({ where: {username: username}} )
+      .then(function(user) {
+        user.update({ password: password });
+      })
+      .then(function(result) {
+        res.status(204).json(result);
+      })
+      .catch(function(err) {
+        res.status(404).json(err);
+      })
   }
 
 };

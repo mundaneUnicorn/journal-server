@@ -17,6 +17,7 @@ module.exports = function(app, express) {
 
   app.use('/api/users', utils.decode);
   app.get('/api/users', userController.findUser);
+  app.put('/api/users', userController.updatePW);
 
   app.use('/api/friends', utils.decode);
   app.get('/api/friends', friendsController.fetchFriends);
