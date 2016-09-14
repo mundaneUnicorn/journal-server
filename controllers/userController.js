@@ -59,7 +59,7 @@ module.exports = {
     var password = req.body.password;
     db.User.findOne({ where: {username: username}} )
       .then(function(user) {
-        user.update({ password: password })
+        user.update({ password: password });
       })
       .then(function(result) {
         res.status(204).json(result);
