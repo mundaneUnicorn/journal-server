@@ -93,25 +93,25 @@ module.exports = {
   },
 
   //Deletes an entry and sends a copy of that entry
-  deleteEntry: (req, res, next) => {
-    let deletedEntry;
+  deleteEntry: function(req, res, next) {
+    var deletedEntry;
 
     //find entry
     db.Entry.findOne({
       where: req.body
     })
     //delete entry
-    .then(entry => {
+    .then(function(entry) {
       deletedEntry = entry.dataValues;
       return db.Entry.destroy({
         where: entry.dataValues
       });
     })
     //send response
-    .then(() => {
+    .then(function() {
       res.send(deletedEntry);
     })
-    .catch(error => {
+    .catch(function(error) {
       console.log('ENTRY DELETION ERROR: ', error);
       res.status(500).send('Error');
     })
