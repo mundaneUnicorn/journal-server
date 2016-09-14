@@ -65,7 +65,15 @@ module.exports = {
       }
     })
     .then(function (response) {
-      console.log(response);
+      db.Entry.update({
+        rating: response.rating + 1,
+      }, {
+        where: {
+          id: req.body.entryId,
+        }
+      });
+      
+      res.send(response.rating + 1);
     });
   },
 
