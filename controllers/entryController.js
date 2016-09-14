@@ -2,7 +2,7 @@ var db = require('../models/Database.js');
 
 module.exports = {
 
-  createEntry: function(req, res, next){
+  createEntry: function(req, res, next) {
     var query = req.body;
     query['userId'] = req.user.id;
 
@@ -10,9 +10,9 @@ module.exports = {
       .then(function(newEntry) {
         res.send('Success');
       })
-      .catch(function(err){
-        res.status(404).json(err)
-      })
+      .catch(function(err) {
+        res.status(404).json(err);
+      });
   },
 
   getEntries: function(req, res, next) {
@@ -28,31 +28,61 @@ module.exports = {
               where: { userId: req.query.userId },
               order: [['createdAt', 'DESC']]
             })
-              .then(function(entries){
+              .then(function(entries) {
                 res.send(entries);
               })
-              .catch(function(err){
-                res.status(404).json(err)
+              .catch(function(err) {
+                res.status(404).json(err);
               });
           } else {
-            res.status(404).json({ error: 'you are not friends'})
+            res.status(404).json({ error: 'you are not friends'});
           }
         })
         .catch(function(err) {
-          res.status(404).json(err)
+          res.status(404).json(err);
         });
     } else {
       db.Entry.findAll({ 
         where: { userId: req.user.id },
         order: [['createdAt', 'DESC']]
       })
-      .then(function(entries){
+      .then(function(entries) {
         res.send(entries);
       })
-      .catch(function(err){
+      .catch(function(err) {
         res.status(404).json({error: 'Error retrieving entires: ' + err});
       });
     }
-  }
+  },
+
+
+  likeEntry: function (req, res, next) {
+    // TODO:  Write function that queries database to get a specific entry,
+    //        and increments its rating.
+    db.Entry.findAll({
+      where: {
+        id: req.body.entryId,
+      }
+    })
+    .then(function (response) {
+      var rating = response[0].dataValues.rating;
+      console.log(rating);
+      db.Entry.update({
+        rating: rating + 1,
+      }, {
+        where: {
+          id: req.body.entryId,
+        }
+      }).then(function (response) {
+        res.send('Okay!');
+      });
+      
+    });
+  },
 
 };
+
+
+
+
+

@@ -13,6 +13,8 @@ module.exports = function(app, express) {
   app.post('/api/entries', entryController.createEntry);
   app.get('/api/entries', entryController.getEntries);
 
+  app.post('/api/likes', entryController.likeEntry);
+
   app.use('/api/users', utils.decode);
   app.get('/api/users', userController.findUser);
 
@@ -32,4 +34,4 @@ module.exports = function(app, express) {
   app.delete('/api/friendreq', requestController.rejectRequest);
 
 
-}
+};

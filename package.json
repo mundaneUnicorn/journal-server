@@ -4,6 +4,9 @@
   "description": "All back-end files for ironic anagrams",
   "main": "server.js",
   "scripts": {
+    "postgres": "postgres -D /usr/local/var/postgres",
+    "rebase": "git pull upstream master --rebase && git push origin master",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
