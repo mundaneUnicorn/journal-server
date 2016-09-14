@@ -13,8 +13,9 @@ module.exports = function(app, express) {
   app.post('/api/entries', entryController.createEntry);
   app.get('/api/entries', entryController.getEntries);
 
-  app.post('/api/like', function (req, res) {
+  app.post('/api/likes', function (req, res) {
     // TODO: Write a handler for this endpoint.
+    console.log('-----------------------------------------------------', req.body.entryId);
   });
 
   app.use('/api/users', utils.decode);
