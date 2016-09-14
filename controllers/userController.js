@@ -66,6 +66,7 @@ module.exports = {
       })
       .catch(function(err) {
         res.status(404).json(err);
+      }
   }
 
 };
