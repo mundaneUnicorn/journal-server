@@ -11,9 +11,6 @@ module.exports = {
         res.send('Success');
       })
       .catch(function(err) {
-        console.log('----------------------------------------------------------------\nGOT HERE!\n----------------------------------------------------------------\n');
-        console.log(err);
-        console.log('----------------------------------------------------------------\nGOT HERE!\n----------------------------------------------------------------\n');
         res.status(404).json(err);
       });
   },
@@ -56,6 +53,11 @@ module.exports = {
         res.status(404).json({error: 'Error retrieving entires: ' + err});
       });
     }
-  }
+  },
+
+  likeEntry: function (req, res, next) {
+    // TODO:  Write function that queries database to get a specific entry,
+    //        and increments its rating.
+  },
 
 };

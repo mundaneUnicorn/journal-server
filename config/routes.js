@@ -13,6 +13,10 @@ module.exports = function(app, express) {
   app.post('/api/entries', entryController.createEntry);
   app.get('/api/entries', entryController.getEntries);
 
+  app.post('/api/like', function (req, res) {
+    // TODO: Write a handler for this endpoint.
+  });
+
   app.use('/api/users', utils.decode);
   app.get('/api/users', userController.findUser);
 
