@@ -13,10 +13,10 @@ var User = sequelize.define('user', {
 var Entry = sequelize.define('entry', {
   text: Sequelize.STRING,
   location: Sequelize.STRING,
-  rating: {
-    type: Sequelize.INTEGER,
+  votes: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
     allowNull: false,
-    defaultValue: 0,
+    defaultValue: [],
   }
 });
 
