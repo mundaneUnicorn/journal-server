@@ -74,7 +74,7 @@ module.exports = {
           id: req.body.entryId,
         }
       }).then(function (response) {
-        res.sendStatus(200);
+        res.send('Okay!');
       });
       
     });
