@@ -59,24 +59,37 @@ module.exports = {
   likeEntry: function (req, res, next) {
     // TODO:  Write function that queries database to get a specific entry,
     //        and increments its rating.
-    db.Entry.findAll({
+    db.Entry.findOne({
       where: {
         id: req.body.entryId,
       }
     })
     .then(function (response) {
-      var rating = response[0].dataValues.rating;
-      console.log(rating);
+      var votesArray = response.dataValues.votes;
+      var userIndex = votesArray.indexOf(req.body.user);
+      if (userIndex === -1) {
+        console.log('--------->', votesArray);
+        console.log('--------->', req.body.user);
+        votesArray.push(req.body.user);
+        console.log('--------->', votesArray);
+      } else {
+        votesArray.splice(userIndex, 1);
+      }
+
+
       db.Entry.update({
-        rating: rating + 1,
+        votes: votesArray,
       }, {
         where: {
           id: req.body.entryId,
         }
       }).then(function (response) {
-        res.send('Okay!');
+        if (userIndex === -1) {
+          res.send(JSON.stringify(1));
+        } else {
+          res.send(JSON.stringify(-1));
+        }
       });
-      
     });
   },
 
