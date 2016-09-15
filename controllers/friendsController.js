@@ -69,7 +69,7 @@ module.exports = {
         },
       });
 
-      res.send('Okey-dokey, Smokey!');
+      res.send(204);
     });
   },
 };
