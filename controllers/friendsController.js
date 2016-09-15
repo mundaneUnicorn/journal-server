@@ -70,6 +70,8 @@ module.exports = {
       });
 
       res.send(204);
+    }).catch(function (error) {
+      res.send(400);
     });
   },
 };
