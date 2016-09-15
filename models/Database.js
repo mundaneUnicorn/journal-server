@@ -59,14 +59,27 @@ var Request = sequelize.define('request', {
   }
 });
 
+var Comment = sequelize.define('comment', {
+  message: Sequelize.TEXT('medium')
+});
+
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
+
+/*
+belongsTo means 1:1 relationship on the source model
+*/
+
 Entry.belongsTo(User);
 Request.belongsTo(User);
+Comment.belongsTo(User);
+Comment.belongsTo(Entry);
 
 User.hasMany(Entry);
 User.hasMany(Request);
+User.hasMany(Comment);
+Entry.hasMany(Comment);
 
 User.sync();
 Relationships.sync();
