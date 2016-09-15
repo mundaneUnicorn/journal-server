@@ -92,7 +92,7 @@ Request.sync();
 Comment.sync();
 
 module.exports.User = User;
-
+module.exports.Privacy = Privacy;
 module.exports.Entry = Entry;
 module.exports.Relationships = Relationships;
 module.exports.Request = Request;
