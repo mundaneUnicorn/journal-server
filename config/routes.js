@@ -40,5 +40,7 @@ module.exports = function(app, express) {
   app.get('/api/friendreq', requestController.getRequests);
   app.delete('/api/friendreq', requestController.rejectRequest);
 
-
+  app.use('/api/privacy', utils.decode);
+  app.get('/api/privacy', privacyController.getPrivacy);
+  app.post('/api/privacy', privacyController.setPrivacy);
 };
