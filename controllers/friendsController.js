@@ -88,5 +88,5 @@ module.exports = {
     .catch(function (error) {
       res.send(400);
     });
-  },
+  }
 };
