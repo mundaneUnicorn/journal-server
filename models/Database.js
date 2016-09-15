@@ -20,6 +20,7 @@ var Entry = sequelize.define('entry', {
   }
 });
 
+
 var Relationships = sequelize.define('relationships', {
   user1: Sequelize.INTEGER,
   user2: Sequelize.INTEGER
@@ -63,6 +64,9 @@ var Comment = sequelize.define('comment', {
   message: Sequelize.TEXT('medium')
 });
 
+var Privacy = sequelize.define('privacy', {});
+User.hasMany(Privacy);
+Entry.hasOne(Privacy);
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
