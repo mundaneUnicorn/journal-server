@@ -107,6 +107,6 @@ module.exports = {
     .catch(function(error) {
       console.log('ENTRY DELETION ERROR: ', error);
       res.status(500).send('Error');
-    })
+    });
   }
 };
