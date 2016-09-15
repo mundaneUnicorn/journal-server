@@ -51,7 +51,7 @@ module.exports = {
      })
       .catch(function(err) {
         res.json(err);
-      })
+      });
   },
 
   updatePW: function(req, res, next) {
@@ -66,7 +66,7 @@ module.exports = {
       })
       .catch(function(err) {
         res.status(404).json(err);
-      })
+      });
   }
 
 };
