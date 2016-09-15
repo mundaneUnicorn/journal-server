@@ -52,7 +52,7 @@ module.exports = {
   deleteFriend: function (req, res, next) {
     // TODO: Implement me!
     db.Users.findOne({
-      where: { username: req.body.friend },
+      where: { username: req.body.username },
     }).then(function (response) {
       
       db.Relationships.destroy({
