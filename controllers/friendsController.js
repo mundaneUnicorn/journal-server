@@ -54,6 +54,7 @@ module.exports = {
     db.Users.findOne({
       where: { username: req.body.friend },
     }).then(function (response) {
+      
       db.Relationships.destroy({
         where: { 
           user1: req.user.id,
