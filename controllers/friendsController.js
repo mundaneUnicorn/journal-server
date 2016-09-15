@@ -53,24 +53,39 @@ module.exports = {
     // TODO: Implement me!
     db.Users.findOne({
       where: { username: req.body.username },
-    }).then(function (response) {
-      
+    })
+
+    .then(function (response) {  
       db.Relationships.destroy({
         where: { 
           user1: req.user.id,
           user2: response.dataValues.id,
         },
-      });
+      })
 
-      db.Relationships.destroy({
-        where: {
-          user2: req.user.id,
-          user1: response.dataValues.id,
-        },
-      });
+      .then(function (response) {
+        db.Relationships.destroy({
+          where: {
+            user2: req.user.id,
+            user1: response.dataValues.id,
+          },
+        })
 
-      res.send(204);
-    }).catch(function (error) {
+        .then (function (response) {
+          res.send(204);
+        })
+
+        .catch(function (error) {
+          res.send(400);
+        });
+      })
+
+      .catch(function (error) {
+        res.send(400);
+      });
+    })
+
+    .catch(function (error) {
       res.send(400);
     });
   },
