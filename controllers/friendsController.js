@@ -51,7 +51,7 @@ module.exports = {
 
   deleteFriend: function (req, res, next) {
     // TODO: Implement me!
-    db.Users.findOne({
+    db.User.findOne({
       where: { username: req.body.username },
     })
 
@@ -63,7 +63,7 @@ module.exports = {
         },
       })
 
-      .then(function (response) {
+      .then(function () {
         db.Relationships.destroy({
           where: {
             user2: req.user.id,
@@ -72,21 +72,21 @@ module.exports = {
         })
 
         .then (function (response) {
-          res.send(204);
+          res.status(204).json(response);
         })
 
         .catch(function (error) {
-          res.send(400);
+          res.status(400).json(error);
         });
       })
 
       .catch(function (error) {
-        res.send(400);
+        res.status(400).json(error);
       });
     })
 
     .catch(function (error) {
-      res.send(400);
+      res.status(400).json(error);
     });
-  },
+  }
 };
