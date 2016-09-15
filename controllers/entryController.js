@@ -70,6 +70,7 @@ module.exports = {
         votesArray.push(req.body.user);
       } else {
         votesArray.splice(userIndex, 1);
+        console.log('----------------->', votesArray);
       }
 
 
