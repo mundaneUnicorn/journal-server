@@ -85,9 +85,11 @@ User.sync();
 Relationships.sync();
 Entry.sync();
 Request.sync();
+Comment.sync();
 
 module.exports.User = User;
 
 module.exports.Entry = Entry;
 module.exports.Relationships = Relationships;
 module.exports.Request = Request;
+module.exports.Comment = Comment;
