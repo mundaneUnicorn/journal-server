@@ -3,13 +3,13 @@ var db = require('../models/Database.js');
 module.exports = {
 
   saveComment: function(req, res, next) {
-    var text = req.body.text;
+    var id = req.body.id;
     var comment = req.body.comment;
     var user = req.user.id;
     res.status(200).json({HEY: req.body});
     db.Entry.findOne({
       where: {
-        text: text
+        id: id
       }
     }).then(function(result) {
       db.Comment.create({
