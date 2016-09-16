@@ -14,6 +14,9 @@ module.exports = function(app, express) {
   app.get('/api/entries', entryController.getEntries);
   app.delete('/api/entries', entryController.deleteEntry);
 
+  app.use('/api/comment', utils.decode);
+  app.post('/api/comment', commentController.saveComment);
+
   app.post('/api/likes', entryController.likeEntry);
 
   app.use('/api/users', utils.decode);
