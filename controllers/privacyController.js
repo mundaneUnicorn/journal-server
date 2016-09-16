@@ -4,14 +4,15 @@ var _ = require('underscore');
 module.exports = {
   getPrivacy: function(req, res, next) {
     db.Privacy.findAll({
-      entryId: req.query.entryId
+      where: {
+        entryId: req.query.entryId
+      }
     })
     .then(function(results) {
       var privacies = [];
       results.forEach(function(result) {
         privacies.push(result.dataValues);
       });
-      
       res.send(privacies);
     })
     .catch(function(err) {
