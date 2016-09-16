@@ -25,8 +25,19 @@ module.exports = {
   },
 
   getComments: function(req, res, next) {
-    console.log('HEY SOMEBODY ASKED FOR COMMENTS DUDE!');
-    res.status(200).json(['jon', 'nick', 'jacob', 'bob']);    
+
+    db.Comment.findAll({
+      where: {
+        entryId: req.query.postID
+      }
+    }).then(function(comments) {
+      console.log('retrieved comments: ', comments);
+      if (comments.length) {
+        res.send(comments);
+      }
+    }).catch(function(err) {
+      console.log('error retrieving comments: ', err);
+    })
   }
 
 }
