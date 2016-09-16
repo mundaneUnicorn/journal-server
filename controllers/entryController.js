@@ -16,9 +16,42 @@ module.exports = {
   },
 
   getEntries: function(req, res, next) {
-    if (req.query.userId && (req.query.userId !== req.user.id.toString())) {
+    if (req.query.userId && req.query.userId === '*') {
       // check if req.query.userId is in friendlist
-      db.Relationships.findOne({ 
+      console.log('Querying all users.');
+      db.Relationships.findAll({ 
+        where: { user1: req.user.id }
+      })
+      .then(function(friends) {
+        var messages = [];
+        var queryCounter = 0;
+        var queryTarget = friends.length;
+        friends.forEach(function (friendObject) {
+          db.Entry.findAll({ 
+            where: { userId: friendObject.dataValues.user2 },
+            order: [['createdAt', 'DESC']]
+          }).then(function (retrievedMessages) {
+            queryCounter++;
+            messages = messages.concat(retrievedMessages);
+            
+            if (queryCounter >= queryTarget) {
+              messages.sort(function (a, b) {
+                return b.dataValues.votes.length - a.dataValues.votes.length;
+              });
+              res.send(messages);
+            }
+          }).catch(function (error) {
+            queryCounter++;
+            if (queryCounter >= queryTarget) {
+              res.send(messages);
+            }
+          });
+        });
+      });
+    } else if (req.query.userId && (req.query.userId !== req.user.id.toString())) {
+      // check if req.query.userId is in friendlist
+      console.log('Querying a specific friend.');
+      db.Relationships.findAll({ 
         where: { user1: req.user.id, user2: req.query.userId }
       })
         .then(function(friends) {
@@ -42,6 +75,7 @@ module.exports = {
           res.status(404).json(err);
         });
     } else {
+      console.log('Getting your own posts!');
       db.Entry.findAll({ 
         where: { userId: req.user.id },
         order: [['createdAt', 'DESC']]
