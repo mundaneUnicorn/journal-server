@@ -28,9 +28,13 @@ module.exports = {
         var queryCounter = 0;
         var queryTarget = friends.length;
         friends.forEach(function (friendObject) {
-          db.Entry.findAll({ 
+          db.Entry.findAll({
             where: { userId: friendObject.dataValues.user2 },
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'DESC']],
+            include: [{
+              model: db.User,
+              where: { id: friendObject.dataValues.user2 },
+            }],
           }).then(function (retrievedMessages) {
             queryCounter++;
             messages = messages.concat(retrievedMessages);
