@@ -64,9 +64,10 @@ var Comment = sequelize.define('comment', {
   message: Sequelize.TEXT('medium')
 });
 
-var Privacy = sequelize.define('privacy', {});
-User.hasMany(Privacy);
-Entry.hasOne(Privacy);
+var Privacy = sequelize.define('privacy', {
+  entryId: Sequelize.INTEGER,
+  userId: Sequelize.INTEGER
+});
 // puts a UserId column on each Entry instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Entry
@@ -90,6 +91,7 @@ Relationships.sync();
 Entry.sync();
 Request.sync();
 Comment.sync();
+Privacy.sync();
 
 module.exports.User = User;
 module.exports.Privacy = Privacy;
