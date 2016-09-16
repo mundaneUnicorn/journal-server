@@ -25,7 +25,8 @@ module.exports = {
   },
 
   getComments: function(req, res, next) {
-
+    console.log('HEY SOMEBODY ASKED FOR COMMENTS DUDE!');
+    res.status(200).json(['jon', 'nick', 'jacob', 'bob']);    
   }
-  
+
 }
