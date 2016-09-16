@@ -2,6 +2,7 @@ var entryController = require('../controllers/entryController.js');
 var userController = require('../controllers/userController.js');
 var friendsController = require('../controllers/friendsController.js');
 var requestController = require('../controllers/requestController.js');
+var commentController = require('../controllers/commentController.js');
 
 var utils = require('./utils.js');
 
@@ -13,6 +14,9 @@ module.exports = function(app, express) {
   app.post('/api/entries', entryController.createEntry);
   app.get('/api/entries', entryController.getEntries);
   app.delete('/api/entries', entryController.deleteEntry);
+
+  app.use('/api/comment', utils.decode);
+  app.post('/api/comment', commentController.saveComment);
 
   app.post('/api/likes', entryController.likeEntry);
 
