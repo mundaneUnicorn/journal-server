@@ -22,5 +22,10 @@ module.exports = {
     }).catch(function(err) {
       res.status(400).json(err);
     })
+  },
+
+  getComments: function(req, res, next) {
+
   }
+  
 }
