@@ -3,12 +3,19 @@ var _ = require('underscore');
 
 module.exports = {
   getPrivacy: function(req, res, next) {
-    db.Privacy.create({
-      entryId: 42069,
-      userId: 69
+    db.Privacy.findAll({
+      entryId: req.query.entryId
     })
-    .then(function(privacy) {
-      res.send(privacy);
+    .then(function(results) {
+      var privacies = [];
+      results.forEach(function(result) {
+        privacies.push(result.dataValues);
+      });
+      
+      res.send(privacies);
+    })
+    .catch(function(err) {
+      res.status(500).send(err);
     });
   },
 
@@ -50,8 +57,6 @@ module.exports = {
       return [removePrivacy, addPrivacy];
     })
     .spread(function(removed, added) {
-      console.log('Privacy rows removed: ', removed);
-      console.log('Privacy rows inserted: ', added.length);
       res.send('success');
     })
     .catch(function(err) {
