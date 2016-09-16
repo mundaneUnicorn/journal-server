@@ -3,6 +3,7 @@ var userController = require('../controllers/userController.js');
 var friendsController = require('../controllers/friendsController.js');
 var requestController = require('../controllers/requestController.js');
 var commentController = require('../controllers/commentController.js');
+var privacyController = require('../controllers/privacyController.js');
 
 var utils = require('./utils.js');
 
@@ -40,5 +41,7 @@ module.exports = function(app, express) {
   app.get('/api/friendreq', requestController.getRequests);
   app.delete('/api/friendreq', requestController.rejectRequest);
 
-
+  app.use('/api/privacy', utils.decode);
+  app.get('/api/privacy', privacyController.getPrivacy);
+  app.post('/api/privacy', privacyController.setPrivacy);
 };

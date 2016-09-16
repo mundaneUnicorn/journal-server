@@ -1,4 +1,5 @@
 var db = require('../models/Database.js');
+var _ =  require('underscore');
 
 module.exports = {
 
@@ -51,29 +52,78 @@ module.exports = {
     } else if (req.query.userId && (req.query.userId !== req.user.id.toString())) {
       // check if req.query.userId is in friendlist
       console.log('Querying a specific friend.');
-      db.Relationships.findAll({ 
-        where: { user1: req.user.id, user2: req.query.userId }
+      db.Relationships.findOne({ 
+        where: { 
+          user1: req.user.id, 
+          user2: req.query.userId
+        }
       })
-        .then(function(friends) {
-          if (friends) {
-            // send entries
-            db.Entry.findAll({ 
-              where: { userId: req.query.userId },
-              order: [['createdAt', 'DESC']]
-            })
-              .then(function(entries) {
-                res.send(entries);
-              })
-              .catch(function(err) {
-                res.status(404).json(err);
-              });
-          } else {
-            res.status(404).json({ error: 'you are not friends'});
-          }
-        })
-        .catch(function(err) {
-          res.status(404).json(err);
-        });
+      .then(function(friends) {
+        if (friends) {
+          var allEntries;
+          db.Entry.findAll({ 
+            where: { userId: req.query.userId },
+            order: [['createdAt', 'DESC']]
+          })
+          .then(function(results) {
+            allEntries = _.map(results, function(result) {
+              return result.dataValues;
+            });
+            var entryIds = _.map(allEntries, function(entry) {
+              return entry.id;
+            });
+
+            return db.Privacy.findAll({
+              where: {
+                entryId: {
+                  $in: entryIds
+                }
+              }
+            });
+          })
+          .then(function(results) {
+            var privacies = _.map(results, function(result) {
+              return {
+                entryId: result.dataValues.entryId,
+                userId: result.dataValues.userId
+              }
+            });
+
+            var viewableEntries = [];
+            allEntries.forEach(function(entry) {
+              var addEntry = false;
+              var encountered = false;
+              for (var i = 0; i < privacies.length; i++) {
+                //is private entry
+                if (entry.id === privacies[i].entryId) {
+                  encountered = true;
+                  //matching user
+                  if (req.user.id === privacies[i].userId) {
+                    addEntry = true;
+                  }
+                }
+              }
+              //is public
+              if (!encountered) {
+                addEntry = true;
+              }
+              if (addEntry) {
+                viewableEntries.push(entry);
+              }
+            });
+
+            res.send(viewableEntries);
+          })
+          .catch(function(err) {
+            res.status(404).json(err);
+          });
+        } else {
+          res.status(404).json({ error: 'you are not friends'});
+        }
+      })
+      .catch(function(err) {
+        res.status(404).json(err);
+      });
     } else {
       console.log('Getting your own posts!');
       db.Entry.findAll({ 
