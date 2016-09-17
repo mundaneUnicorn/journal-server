@@ -25,7 +25,7 @@ module.exports = {
   },
 
   getComments: function(req, res, next) {
-    db.sequelize.query(`SELECT comments.message, users.fullname FROM comments INNER JOIN users ON comments."userId" = users."id" WHERE "entryId" = ${req.query.postID}`)
+    db.sequelize.query(`SELECT comments.message, users.fullname, comments."createdAt" FROM comments INNER JOIN users ON comments."userId" = users."id" WHERE "entryId" = ${req.query.postID}`)
     .then(function(results) {
       res.status(200).send(results[0]);
     }).catch(function(error) {
