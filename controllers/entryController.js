@@ -16,46 +16,40 @@ module.exports = {
       });
   },
 
+
   getEntries: function(req, res, next) {
     if (req.query.userId && req.query.userId === '*') {
-      // check if req.query.userId is in friendlist
-      console.log('Querying all users.');
-      db.Relationships.findAll({ 
-        where: { user1: req.user.id }
-      })
-      .then(function(friends) {
-        var messages = [];
-        var queryCounter = 0;
-        var queryTarget = friends.length;
-        friends.forEach(function (friendObject) {
-          db.Entry.findAll({
-            where: { userId: friendObject.dataValues.user2 },
-            order: [['createdAt', 'DESC']],
-            include: [{
-              model: db.User,
-              where: { id: friendObject.dataValues.user2 },
-            }],
-          }).then(function (retrievedMessages) {
-            queryCounter++;
-            messages = messages.concat(retrievedMessages);
-            
-            if (queryCounter >= queryTarget) {
-              messages.sort(function (a, b) {
-                return b.dataValues.votes.length - a.dataValues.votes.length;
-              });
-              res.send(messages);
+      db.sequelize.query('select entries.id, entries.votes, entries."createdAt", entries."updatedAt", entries.text, users.fullname  from entries inner join (select "user2" from relationships where "user1" = ' + req.user.id + ') a on a."user2" = entries."userId" inner join users on entries."userId" = users.id')
+      .then(function (entries) {
+        db.sequelize.query('select entries.id, entries.votes, entries."createdAt", entries."updatedAt", entries.text, users.fullname, privacies."userId"  from entries inner join (select "user2" from relationships where "user1" = ' + req.user.id + ') a on a."user2" = entries."userId" inner join users on entries."userId" = users.id inner join privacies on privacies."entryId" = entries.id')
+        .then(function (privacies) {
+          if (!privacies[0].length) {
+            res.send(entries[0]);
+          } else {
+            var compositePrivacies = {};
+            privacies[0].forEach(function (privacy) {
+              var id = privacy.id;
+              if (compositePrivacies['' + id] === undefined) {
+                compositePrivacies['' + id] = [];
+              }
+              compositePrivacies['' + id].push(privacy.userId);
+            });
+
+            for (var i = 0; i < entries[0].length; i++) {
+              var privacyList = compositePrivacies['' + entries[0][i].id];
+              if (privacyList && privacyList.length) {
+                if (privacyList.indexOf(req.user.id) === -1) {
+                  entries[0].splice(i, 1);
+                  i--;  
+                }
+              }
             }
-          }).catch(function (error) {
-            queryCounter++;
-            if (queryCounter >= queryTarget) {
-              res.send(messages);
-            }
-          });
+            res.send(entries[0]);
+          }
         });
       });
     } else if (req.query.userId && (req.query.userId !== req.user.id.toString())) {
       // check if req.query.userId is in friendlist
-      console.log('Querying a specific friend.');
       db.Relationships.findOne({ 
         where: { 
           user1: req.user.id, 
@@ -129,7 +123,6 @@ module.exports = {
         res.status(404).json(err);
       });
     } else {
-      console.log('Getting your own posts!');
       db.Entry.findAll({ 
         where: { userId: req.user.id },
         order: [['createdAt', 'DESC']]
@@ -193,7 +186,6 @@ module.exports = {
       res.send(deletedEntry);
     })
     .catch(function(error) {
-      console.log('ENTRY DELETION ERROR: ', error);
       res.status(500).send('Error');
     });
   }
