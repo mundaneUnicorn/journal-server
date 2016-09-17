@@ -99,3 +99,5 @@ module.exports.Entry = Entry;
 module.exports.Relationships = Relationships;
 module.exports.Request = Request;
 module.exports.Comment = Comment;
+
+module.exports.sequelize = sequelize;
