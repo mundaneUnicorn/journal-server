@@ -47,12 +47,32 @@ module.exports = {
       //in new but not existing
       var entriesToAdd = _.difference(newUserIds, existingUserIds);
       var rowsToInsert = [];
-      entriesToAdd.forEach(function(entry) {
+      //set private
+      console.log(req.user.id);
+      if (req.body.userIds.length === 1 && req.body.userIds[0] < 0) {
+        console.log('PRIVATE');
         rowsToInsert.push({
           entryId: req.body.entryId,
-          userId: entry
+          userId: req.user.id
         });
-      })
+      //not private
+      } else {
+        console.log('NOT PRIVATE');
+        //add user id if not public
+        if (req.body.userIds.length > 0) {
+          entriesToAdd.unshift(req.user.id);
+        }
+        
+        entriesToAdd.forEach(function(entry) {
+          rowsToInsert.push({
+            entryId: req.body.entryId,
+            userId: entry
+          });
+        })
+
+      }
+      console.log('entries ', entriesToAdd);
+      console.log('rows: ', rowsToInsert);
       var addPrivacy = db.Privacy.bulkCreate(rowsToInsert);
 
       return [removePrivacy, addPrivacy];
