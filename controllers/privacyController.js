@@ -63,7 +63,7 @@ module.exports = {
       } else {
         console.log('NOT PRIVATE');
         //add user id if not public
-        if (req.body.userIds.length > 0) {
+        if (req.body.userIds.length > 0 && !_.contains(req.body.userIds, req.user.id)) {
           entriesToAdd.unshift(req.user.id);
         }
         
