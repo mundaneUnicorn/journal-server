@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 
-var connectionString = ''; 
+var connectionString = 'postgres:localhost'; 
 
 var sequelize = new Sequelize(connectionString, {
   native: true
