@@ -24,7 +24,6 @@ module.exports = {
         db.sequelize.query('select entries.id, entries.votes, entries."createdAt", entries."updatedAt", entries.text, users.fullname, privacies."userId"  from entries inner join (select "user2" from relationships where "user1" = ' + req.user.id + ') a on a."user2" = entries."userId" inner join users on entries."userId" = users.id inner join privacies on privacies."entryId" = entries.id')
         .then(function (privacies) {
           if (!privacies[0].length) {
-            console.log('>>>>>>>>>>>>>>>>>>>>>>> got here!')
             res.send(entries[0]);
           } else {
             var compositePrivacies = {};
@@ -51,7 +50,6 @@ module.exports = {
       });
     } else if (req.query.userId && (req.query.userId !== req.user.id.toString())) {
       // check if req.query.userId is in friendlist
-      console.log('Querying a specific friend.');
       db.Relationships.findOne({ 
         where: { 
           user1: req.user.id, 
@@ -125,7 +123,6 @@ module.exports = {
         res.status(404).json(err);
       });
     } else {
-      console.log('Getting your own posts!');
       db.Entry.findAll({ 
         where: { userId: req.user.id },
         order: [['createdAt', 'DESC']]
@@ -189,7 +186,6 @@ module.exports = {
       res.send(deletedEntry);
     })
     .catch(function(error) {
-      console.log('ENTRY DELETION ERROR: ', error);
       res.status(500).send('Error');
     });
   }
