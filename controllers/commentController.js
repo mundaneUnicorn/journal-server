@@ -25,18 +25,11 @@ module.exports = {
   },
 
   getComments: function(req, res, next) {
-
-    db.Comment.findAll({
-      where: {
-        entryId: req.query.postID
-      }
-    }).then(function(comments) {
-      console.log('retrieved comments: ', comments);
-      if (comments.length) {
-        res.send(comments);
-      }
-    }).catch(function(err) {
-      console.log('error retrieving comments: ', err);
+    db.sequelize.query(`SELECT comments.message, users.fullname FROM comments INNER JOIN users ON comments."userId" = users."id" WHERE "entryId" = ${req.query.postID}`)
+    .then(function(results) {
+      res.status(200).send(results[0]);
+    }).catch(function(error) {
+      res.send(404);
     })
   }
 
