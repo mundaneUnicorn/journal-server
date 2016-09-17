@@ -24,6 +24,9 @@ module.exports = {
         db.sequelize.query('select entries.id, entries.votes, entries."createdAt", entries."updatedAt", entries.text, users.fullname, privacies."userId"  from entries inner join (select "user2" from relationships where "user1" = ' + req.user.id + ') a on a."user2" = entries."userId" inner join users on entries."userId" = users.id inner join privacies on privacies."entryId" = entries.id')
         .then(function (privacies) {
           if (!privacies[0].length) {
+            entries[0].sort(function (a, b) {
+              return b.votes.length - a.votes.length;
+            });
             res.send(entries[0]);
           } else {
             var compositePrivacies = {};
@@ -44,6 +47,10 @@ module.exports = {
                 }
               }
             }
+
+            entries[0].sort(function (a, b) {
+              return b.votes.length - a.votes.length;
+            });
             res.send(entries[0]);
           }
         });
