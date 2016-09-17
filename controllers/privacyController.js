@@ -13,7 +13,11 @@ module.exports = {
       results.forEach(function(result) {
         privacies.push(result.dataValues);
       });
-      res.send(privacies);
+      var responseObject = {
+        privacies: privacies,
+        currentUserId: req.user.id
+      }
+      res.send(responseObject);
     })
     .catch(function(err) {
       res.status(500).send(err);
